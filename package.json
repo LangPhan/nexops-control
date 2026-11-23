@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "NexOps Control — Senior Frontend Developer (React 18, TypeScript, TanStack Query, SVG, Canvas, Charts) B2B Operations Demo",
+  "description": "NexOps Control — B2B Real-Time Operations & Pipeline Topology Console",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

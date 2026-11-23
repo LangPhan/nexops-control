@@ -1,89 +1,105 @@
-import { memo, useCallback, useMemo, useRef, useState } from 'react';
+import { memo, useCallback, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ArrowRight, CheckCircle2, Layers } from 'lucide-react';
 import { useAppContext } from '../../context/AppContext';
 import { Badge, Button, Card } from '../../shared/ui/Primitives';
 import { StatusIcon, type StatusIconVariant } from '../../shared/ui/StatusIcon';
 import type { NavTab } from '../../types/domain';
 
-interface JdSkillRow {
-  category: string;
-  jdRequirement: string;
-  implementationProof: string;
+interface SystemCapabilityRow {
+  subsystem: string;
+  capability: string;
+  implementation: ReactNode;
   targetTab: NavTab;
   ctaLabel: string;
 }
 
-const JD_MATRIX: readonly JdSkillRow[] = [
+const SYSTEM_CAPABILITIES: readonly SystemCapabilityRow[] = [
   {
-    category: 'Core Stack',
-    jdRequirement:
-      'React 18+ & TypeScript (strict), TanStack Query, Vite, Git/GitHub, Figma tokens',
-    implementationProof:
-      'Strict TS (`noUncheckedIndexedAccess`), TanStack Query v5 `keepPreviousData` + `AbortSignal`, Figma CSS variable tokens (Dark/Light).',
+    subsystem: 'Data & State',
+    capability: 'Server-state caching, cancellation & strict typing',
+    implementation: (
+      <>
+        TanStack Query v5 (<code>keepPreviousData</code>,{' '}
+        <code>AbortSignal</code>), strict TypeScript with{' '}
+        <code>noUncheckedIndexedAccess</code>.
+      </>
+    ),
     targetTab: 'async-ops',
     ctaLabel: 'Open Query Lab',
   },
   {
-    category: 'Complex State UI',
-    jdRequirement:
-      'Thiết kế và phát triển UI phức tạp, thay đổi theo luồng dữ liệu và trạng thái',
-    implementationProof:
-      'Discriminated-union Canary Rollout FSM (`rolloutMachine.ts`) + multi-workspace reactive telemetry pipeline.',
+    subsystem: 'Workflow FSM',
+    capability: 'State-driven canary deployment & rollback control',
+    implementation: (
+      <>
+        Discriminated-union finite state machine in{' '}
+        <code>rolloutMachine.ts</code> with guarded transitions and recovery
+        paths.
+      </>
+    ),
     targetTab: 'overview',
     ctaLabel: 'Open Operations',
   },
   {
-    category: 'Async & Optimistic UI',
-    jdRequirement:
-      'Triển khai UI tương tác/trạng thái phản ánh hành động người dùng & tác vụ bất đồng bộ',
-    implementationProof:
-      'Optimistic Incident & Node mutations with snapshot rollback + retry toast + cancellable `AbortController` multi-stage jobs.',
+    subsystem: 'Optimistic UI',
+    capability: 'Non-blocking mutations with rollback & abortable jobs',
+    implementation: (
+      <>
+        Cache snapshot rollback with retry toast notifications and multi-stage{' '}
+        <code>AbortController</code> task orchestration.
+      </>
+    ),
     targetTab: 'async-ops',
     ctaLabel: 'Open Async Engine',
   },
   {
-    category: 'Shared Architecture',
-    jdRequirement:
-      'Thiết kế, cải tiến cấu trúc Frontend & component dùng chung, tối ưu hiệu suất & bảo trì',
-    implementationProof:
-      'Feature-sliced `src/features/*` + reusable `src/shared/ui/*` primitives (`VirtualTable`, `Drawer`, `StatusIcon`, `ErrorBoundary`).',
-    targetTab: 'architecture',
-    ctaLabel: 'Inspect Tokens Below',
+    subsystem: 'Canvas Engine',
+    capability: 'High-density interactive topology (250–5,000 nodes)',
+    implementation: (
+      <>
+        Uniform Spatial Hash Grid <code>O(1)</code> hit-testing, viewport
+        frustum culling, offscreen sprite atlas, and Optimized vs Naive
+        benchmark mode.
+      </>
+    ),
+    targetTab: 'canvas',
+    ctaLabel: 'Open Canvas Map',
   },
   {
-    category: 'Legacy Modernization',
-    jdRequirement:
-      'Hiểu codebase cũ, cải tiến dần dần dựa trên tinh thần hợp tác (Planning, Design, BE)',
-    implementationProof:
-      'Interactive Strangler Fig refactoring lab below comparing un-cancelled race-prone `useEffect` vs memoized TanStack Query.',
-    targetTab: 'architecture',
-    ctaLabel: 'Test Refactoring Lab',
-  },
-  {
-    category: 'Bonus #1 · Charts',
-    jdRequirement: 'Có kinh nghiệm phát triển đa dạng các loại biểu đồ',
-    implementationProof:
-      '4 custom responsive SVG charts (Multi-Series Area/Line, Stacked Bar, Radial SLA Donut, Service×Time Heatmap) linked to 2,000-row table.',
+    subsystem: 'Visualizations',
+    capability: 'Cross-filtered analytics & 2,000-row virtualized stream',
+    implementation: (
+      <>
+        4 custom responsive SVG charts synced with a windowed{' '}
+        <code>VirtualTable</code> using React 18 <code>useDeferredValue</code>.
+      </>
+    ),
     targetTab: 'analytics',
-    ctaLabel: 'Open 4 Charts',
+    ctaLabel: 'Open Analytics',
   },
   {
-    category: 'Bonus #2 · SVG UI',
-    jdRequirement:
-      'Triển khai UI trực quan hóa trạng thái & icon động bằng SVG',
-    implementationProof:
-      'Interactive 5-stage SVG Pipeline Map with dynamic flow speed + 7 animated vector `<StatusIcon />` states.',
+    subsystem: 'Vector Status',
+    capability: 'Dynamic SVG pipeline flow & accessible animated icons',
+    implementation: (
+      <>
+        5-stage interactive SVG data pipeline scaled by throughput plus 7
+        reusable vector <code>StatusIcon</code> states.
+      </>
+    ),
     targetTab: 'overview',
     ctaLabel: 'Open SVG Pipeline',
   },
   {
-    category: 'Bonus #3 · Canvas Perf',
-    jdRequirement:
-      'Phát triển đồ họa tương tác Canvas & tối ưu hiệu suất rendering',
-    implementationProof:
-      '250–5,000 node Pan/Zoom HTML5 Canvas with Spatial Hash Grid O(1) hit-testing, Frustum Culling, Sprite Atlas & Optimized vs Naive toggle.',
-    targetTab: 'canvas',
-    ctaLabel: 'Open Canvas Benchmark',
+    subsystem: 'Design System',
+    capability: 'Modular feature slices & shared UI primitives',
+    implementation: (
+      <>
+        Reusable <code>Drawer</code>, <code>ToastProvider</code>,{' '}
+        <code>ErrorBoundary</code>, and Dark/Light Figma-ready CSS tokens.
+      </>
+    ),
+    targetTab: 'architecture',
+    ctaLabel: 'Inspect Tokens',
   },
 ];
 
@@ -206,54 +222,62 @@ export function ArchitecturePage() {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            Architecture, Incremental Refactoring &amp; JD Coverage Map
+            System Architecture &amp; Performance Lab
           </h1>
           <p className="page-subtitle">
-            Direct traceability from every JD requirement &amp; bonus criterion to
-            working, verified implementation
+            Core platform capabilities, render-isolation benchmarks, and
+            semantic design tokens
           </p>
         </div>
         <Badge variant="healthy">
-          <CheckCircle2 size={13} /> 8 / 8 JD Criteria Verified
+          <CheckCircle2 size={13} /> Production Architecture
         </Badge>
       </div>
 
-      {/* Section 1: JD Skill Coverage Matrix */}
+      {/* Section 1: Platform Architecture & Capabilities */}
       <Card
         title={
           <>
             <Layers size={16} color="var(--accent-primary)" />
-            Interactive JD Skill Coverage Matrix (5+ YOE Frontend Developer)
+            Platform Architecture &amp; Capabilities
           </>
         }
-        subtitle="Click any live demo link to inspect the running implementation"
+        subtitle="Inspect any subsystem module directly in the live console"
       >
         <div style={{ overflowX: 'auto' }}>
           <table className="data-table">
             <thead>
               <tr>
-                <th>Category</th>
-                <th>JD Requirement / Bonus</th>
-                <th>Implemented Evidence in NexOps Control</th>
-                <th>Live Demo</th>
+                <th>Subsystem</th>
+                <th>Capability</th>
+                <th>Engineering Implementation</th>
+                <th>Module</th>
               </tr>
             </thead>
             <tbody>
-              {JD_MATRIX.map((row) => (
-                <tr key={row.category}>
+              {SYSTEM_CAPABILITIES.map((row) => (
+                <tr key={row.subsystem}>
                   <td>
-                    <Badge variant="info">{row.category}</Badge>
+                    <Badge variant="info">{row.subsystem}</Badge>
                   </td>
-                  <td style={{ fontWeight: 500 }}>{row.jdRequirement}</td>
+                  <td style={{ fontWeight: 500 }}>{row.capability}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>
-                    {row.implementationProof}
+                    {row.implementation}
                   </td>
                   <td>
                     <Button
                       size="sm"
                       variant="secondary"
                       icon={<ArrowRight size={12} />}
-                      onClick={() => setActiveTab(row.targetTab)}
+                      onClick={() => {
+                        if (row.targetTab === 'architecture') {
+                          document
+                            .getElementById('design-tokens')
+                            ?.scrollIntoView({ behavior: 'smooth' });
+                          return;
+                        }
+                        setActiveTab(row.targetTab);
+                      }}
                     >
                       {row.ctaLabel}
                     </Button>
@@ -338,7 +362,7 @@ useQuery({
       </Card>
 
       {/* Section 3: Figma Design Tokens & Animated SVG Icon Kit */}
-      <div className="grid-12">
+      <div id="design-tokens" className="grid-12">
         <div className="col-span-6">
           <Card
             title="Figma-Ready Semantic Design Tokens"

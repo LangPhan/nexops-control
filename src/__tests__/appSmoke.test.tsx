@@ -11,7 +11,7 @@ describe('NexOps Control App smoke navigation', () => {
     setChaosConfig({ latencyMs: 15, errorRate: 0 });
   });
 
-  it('renders AppShell and switches across all 5 JD showcase views cleanly', async () => {
+  it('renders AppShell and switches across all 5 console views cleanly', async () => {
     const client = createAppQueryClient();
     const user = userEvent.setup();
 
@@ -46,12 +46,12 @@ describe('NexOps Control App smoke navigation', () => {
       await screen.findByText(/Async Task Engine & TanStack Query Inspector/i)
     ).toBeInTheDocument();
 
-    // 5. Architecture & JD Map
+    // 5. System Architecture
     await user.click(
-      screen.getByRole('button', { name: /Architecture & JD Map/i })
+      screen.getByRole('button', { name: /System Architecture/i })
     );
     expect(
-      await screen.findByText(/Architecture, Incremental Refactoring & JD Coverage Map/i)
+      await screen.findByText(/System Architecture & Performance Lab/i)
     ).toBeInTheDocument();
   });
 });

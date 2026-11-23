@@ -53,8 +53,8 @@ const NAV_ITEMS: readonly NavItemConfig[] = [
   },
   {
     id: 'architecture',
-    label: 'Architecture & JD Map',
-    pill: '5+ YOE',
+    label: 'System Architecture',
+    pill: 'Design',
     icon: <Layers size={16} />,
   },
 ];
@@ -144,18 +144,18 @@ export function AppShell({ children }: { children: ReactNode }) {
               justifyContent: 'space-between',
             }}
           >
-            <strong style={{ fontSize: 12 }}>JD Skill Coverage</strong>
-            <Badge variant="healthy">100%</Badge>
+            <strong style={{ fontSize: 12 }}>Platform Console</strong>
+            <Badge variant="healthy">v4.9.0</Badge>
           </div>
           <p style={{ fontSize: 11, color: 'var(--text-secondary)' }}>
-            React 18 · TS Strict · TanStack Query · 4 Charts · SVG · Canvas 5k
+            React 18 · TS Strict · TanStack Query · SVG · Canvas
           </p>
           <Button
             size="sm"
             variant="secondary"
             onClick={() => selectTab('architecture')}
           >
-            View JD Proof Matrix
+            Explore Architecture
           </Button>
         </div>
       </aside>
